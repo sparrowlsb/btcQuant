@@ -14,13 +14,14 @@ from okex.consts import *
 from okex.premium import *
 if __name__ == '__main__':
 
-    api_key = '42ab348f-14aa-4754-ad0e-bd3f05f5a03b'
-    seceret_key = 'FD2BCD95A08F9E6FA7ED9BD83D61B513'
-    passphrase = '123.fighting'
+    api_key = API_KEY
+    seceret_key = SECERET_KEY
+    passphrase = PASSPARASE
     futureAPI = future.FutureAPI(api_key, seceret_key, passphrase, True)
     swapAPI = swap.SwapAPI(api_key, seceret_key, passphrase, True)
+    smtp = smtplib.SMTP_SSL(SMTP, 465)
 
-
+    count = 0
     while True:
         # future api test
         dictRealizedFutureCoin = {}
@@ -38,15 +39,29 @@ if __name__ == '__main__':
         priceList = premiumInformation(futureResultTicker,swapResultTicker,futureMaxDate)
         print priceList
 
-        endPriceList = {}
-        for price in  priceList:
-            if price[1]>=0.023 :
-                endPriceList[price[0]]=price[1]
-        endPriceList = sorted(endPriceList.items(), key=lambda d: d[1], reverse=True)
+        endLowPriceList = {}
+        endMidPriceList = {}
+        endGoodPriceList = {}
+        endWonderPriceList = {}
 
-        if endPriceList:
+        for price in  priceList:
+            if price[1]>=0.02 :
+                endLowPriceList[price[0]]=price[1]
+            if price[1] >= 0.23:
+                endMidPriceList[price[0]] = price[1]
+            if price[1] >= 0.03:
+                endGoodPriceList[price[0]] = price[1]
+            if price[1] >= 0.05:
+                endWonderPriceList[price[0]] = price[1]
+
+        endLowPriceList = sorted(endLowPriceList.items(), key=lambda d: d[1], reverse=True)
+        endMidPriceList = sorted(endMidPriceList.items(), key=lambda d: d[1], reverse=True)
+        endGoodPriceList = sorted(endGoodPriceList.items(), key=lambda d: d[1], reverse=True)
+        endWonderPriceList = sorted(endWonderPriceList.items(), key=lambda d: d[1], reverse=True)
+
+        if endLowPriceList and count%20 == 0:
             s = ""
-            for price in endPriceList:
+            for price in endLowPriceList:
                 s = s +"币种："+str(price[0])+ " 溢价率："+str(price[1])+"\n"
             print s
             message = MIMEText((s), "plain", "utf-8")
@@ -55,7 +70,6 @@ if __name__ == '__main__':
             message["To"] = "1158362548@qq.com"
             message["From"] = "1158362548@qq.com"
 
-            smtp = smtplib.SMTP_SSL("smtp.qq.com",465)  # 465或587是一个固定值，smtp服务器端口号
 
             smtp.login("a1158362548@qq.com", "zhzxprpjgtiwfedh")
             smtp.sendmail("a1158362548@qq.com", ["a1158362548@qq.com"], message.as_string())
@@ -73,5 +87,6 @@ if __name__ == '__main__':
                 needCoin[priceDifference] = dictPriceDifference[priceDifference]
 
         print dictPriceDifference
-        time.sleep(103)
+        count = count + 1
+        time.sleep(30)
 

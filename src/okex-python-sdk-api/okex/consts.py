@@ -1,4 +1,7 @@
 #coding=utf-8
+# emai
+SMTP = 'smtp.qq.com'
+
 
 # http header
 # API_URL = 'https://www.okex.com'
@@ -9,6 +12,9 @@ OK_ACCESS_SIGN = 'OK-ACCESS-SIGN'
 OK_ACCESS_TIMESTAMP = 'OK-ACCESS-TIMESTAMP'
 OK_ACCESS_PASSPHRASE = 'OK-ACCESS-PASSPHRASE'
 
+API_KEY = '42ab348f-14aa-4754-ad0e-bd3f05f5a03b'
+SECERET_KEY = 'FD2BCD95A08F9E6FA7ED9BD83D61B513'
+PASSPARASE = '123.fighting'
 
 ACEEPT = 'Accept'
 COOKIE = 'Cookie'
