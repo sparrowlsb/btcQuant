@@ -1,3 +1,4 @@
+#coding=utf-8
 import account_api as account
 import ett_api as ett
 import futures_api as future
@@ -5,7 +6,9 @@ import lever_api as lever
 import spot_api as spot
 import swap_api as swap
 import json
+import pymysql.cursors
 from consts import *
+from datetime import datetime,timedelta
 
 
 def maxDateFuture(futureResultTicker):
@@ -18,14 +21,15 @@ def maxDateFuture(futureResultTicker):
 
     return maxDate
 
-def premiumInformation(futureResultTicker,swapResultTicker,maxDate):
+def premiumInformation(timestamp,futureResultTicker,swapResultTicker,maxDate):
 
     jsonFutureTicker = json.dumps(futureResultTicker)
     dictFutureTicker = json.loads(jsonFutureTicker)
     ft = {}
 
     for futureTicker in dictFutureTicker:
-        instrument = futureTicker['instrument_id'];
+        instrument = futureTicker['instrument_id']
+        timestamp['timestamp'] = futureTicker['timestamp']
         futureKey = instrument.split('-', 3)[0] + "-USD" + "-" + maxDate
         if futureKey == instrument:
             ft[futureTicker['instrument_id'].split('-', 3)[0] + "-USD"] = float(futureTicker['last'])
@@ -45,6 +49,15 @@ def premiumInformation(futureResultTicker,swapResultTicker,maxDate):
         premiumDict[coin] = (ft[coin] - st[coin]) / st[coin]
 
     premiumDict = sorted(premiumDict.items(), key=lambda d: d[1], reverse=True)
+
+    date_ = datetime.strptime(timestamp['timestamp'], "%Y-%m-%dT%H:%M:%S.%fZ")
+
+    # local_time = 2018-08-06 18:00:00
+
+    local_time = date_ + timedelta(hours=8)
+
+    local_time.strftime("%Y-%m-%d %H:%M:%S")
+    timestamp['timestamp'] = local_time
 
     return premiumDict
 
@@ -100,3 +113,19 @@ def futureCoinInformation(futureAPI,accountsAPI,dictRealizedFutureCoin,dictAvail
         dictPriceDifference[coin] = float(abs(dictRealizedFutureCoin[coin] - dictAvailableFutureCoin[coin])*coinPrice)
 
     return dictPriceDifference
+
+def premiumInsert(db,priceList,timestamp):
+    cursor = db.cursor()
+
+    for price in priceList:
+        # SQL 插入语句
+        sql = 'insert into premium_information(coin_name,premium_price,premium_data) values(\'%s\',\'%s\' ,\'%s\')' % (price[0], price[1],timestamp['timestamp'])
+        try:
+            # 执行sql语句
+            cursor.execute(sql)
+            # 提交到数据库执行
+            db.commit()
+        except:
+            # Rollback in case there is any error
+            print 'premiumInsert error'
+            db.rollback()
