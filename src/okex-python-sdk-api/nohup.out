@@ -1,0 +1,11 @@
+[('ETH-USD', 0.018583587100804214), ('EOS-USD', 0.016984126984127018), ('LTC-USD', 0.01574281747303219), ('BCH-USD', 0.014657901144387725), ('XRP-USD', 0.014549938347718769), ('ETC-USD', 0.014020511489030203), ('BTC-USD', 0.006374981205833723), ('BSV-USD', 0.005936572410560778){"{"code":30014,"message":"Too Many Requests"}, 429
+Traceback (most recent call last):
+  File "./quant.py", line 31, in <module>
+    accountsAPI = futureAPI.get_accounts()
+  File "/Users/lsb/tutorial/tutorial/spiders/btcQuant/src/okex-python-sdk-api/okex/futures_api.py", line 21, in get_accounts
+    return self._request_without_params(GET, FUTURE_ACCOUNTS)
+  File "/Users/lsb/tutorial/tutorial/spiders/btcQuant/src/okex-python-sdk-api/okex/client.py", line 65, in _request_without_params
+    return self._request(method, request_path, {})
+  File "/Users/lsb/tutorial/tutorial/spiders/btcQuant/src/okex-python-sdk-api/okex/client.py", line 48, in _request
+    raise exceptions.OkexAPIException(response)
+okex.exceptions.OkexAPIException: API Request Error(code=30014): Too Many Requests
