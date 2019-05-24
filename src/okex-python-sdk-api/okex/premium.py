@@ -129,3 +129,42 @@ def premiumInsert(db,priceList,timestamp):
             # Rollback in case there is any error
             print 'premiumInsert error'
             db.rollback()
+
+def premiumAnalysis(db):
+    cursor = db.cursor()
+
+
+    # SQL 插入语句
+    sql = 'select * from premium_information order by id  '
+
+    # premiumCoinList['']
+    try:
+        # 执行sql语句
+        cursor.execute(sql)
+
+
+        # 获取所有记录列表
+        results = cursor.fetchall()
+        return results
+    except:
+        # Rollback in case there is any error
+        print 'premiumInsert error'
+        db.rollback()
+
+def distinctTime(db):
+    cursor = db.cursor()
+
+    # SQL 插入语句
+    sql = 'select distinct(premium_data ) from premium_information order by id  '
+
+    # premiumCoinList['']
+    try:
+        # 执行sql语句
+        cursor.execute(sql)
+        # 获取所有记录列表
+        results = cursor.fetchall()
+        return results
+    except:
+        # Rollback in case there is any error
+        print 'premiumInsert error'
+        db.rollback()

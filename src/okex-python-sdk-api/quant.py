@@ -56,13 +56,13 @@ if __name__ == '__main__':
         endWonderPriceList = {}
 
         for price in  priceList:
-            if price[1]>=0.018 :
+            if abs(price[1])>=0.018 :
                 endLowPriceList[price[0]]=price[1]
-            if price[1] >= 0.023:
+            if abs(price[1]) >= 0.023:
                 endMidPriceList[price[0]] = price[1]
-            if price[1] >= 0.03:
+            if abs(price[1]) >= 0.03:
                 endGoodPriceList[price[0]] = price[1]
-            if price[1] >= 0.05:
+            if abs(price[1]) >= 0.05:
                 endWonderPriceList[price[0]] = price[1]
 
         endLowPriceList = sorted(endLowPriceList.items(), key=lambda d: d[1], reverse=True)
@@ -138,6 +138,3 @@ if __name__ == '__main__':
         print dictPriceDifference
         count = count + 1
         time.sleep(30)
-
-        smtp.quit()
-        db.close()
