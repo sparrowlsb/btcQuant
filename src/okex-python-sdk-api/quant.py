@@ -12,7 +12,8 @@ import okex.swap_api as swap
 import json
 from datetime import datetime,timedelta
 from okex.consts import *
-from okex.premium import *
+from okex.premiumFuc import *
+from okex.typeFunction import *
 if __name__ == '__main__':
 
     api_key = API_KEY
@@ -25,6 +26,8 @@ if __name__ == '__main__':
     db = pymysql.connect(host=HOST, user=USER, passwd=PASSWORD, db=DBNAME)
 
     count = 0
+    type = 0
+
     while True:
 
         # future api test
@@ -41,34 +44,25 @@ if __name__ == '__main__':
 
         futureResultTicker = futureAPI.get_ticker()
         swapResultTicker = swapAPI.get_ticker()
+
         # 合约季度时间
         futureMaxDate = maxDateFuture(futureResultTicker)
-        # 溢价排序
-        priceList = {}
-        priceList = premiumInformation(timestamp,futureResultTicker,swapResultTicker,futureMaxDate)
 
-        premiumInsert(db,priceList,timestamp)
-        print priceList
+        holdPositionsStatus(futureAPI, accountsAPI, dictRealizedFutureCoin,
+                                                    dictAvailableFutureCoin, dictPriceDifference, futureMaxDate)
 
-        endLowPriceList = {}
-        endMidPriceList = {}
-        endGoodPriceList = {}
-        endWonderPriceList = {}
+        needCoin = {}
+        for priceDifference in dictPriceDifference:
+            if dictPriceDifference[priceDifference] < 100:
+                needCoin[priceDifference] = dictPriceDifference[priceDifference]
 
-        for price in  priceList:
-            if abs(price[1])>=0.018 :
-                endLowPriceList[price[0]]=price[1]
-            if abs(price[1]) >= 0.023:
-                endMidPriceList[price[0]] = price[1]
-            if abs(price[1]) >= 0.03:
-                endGoodPriceList[price[0]] = price[1]
-            if abs(price[1]) >= 0.05:
-                endWonderPriceList[price[0]] = price[1]
+        print dictPriceDifference
 
-        endLowPriceList = sorted(endLowPriceList.items(), key=lambda d: d[1], reverse=True)
-        endMidPriceList = sorted(endMidPriceList.items(), key=lambda d: d[1], reverse=True)
-        endGoodPriceList = sorted(endGoodPriceList.items(), key=lambda d: d[1], reverse=True)
-        endWonderPriceList = sorted(endWonderPriceList.items(), key=lambda d: d[1], reverse=True)
+
+        if type == 0 :
+
+            discoverPremiumOpportunities(db,timestamp,futureResultTicker,swapResultTicker,futureMaxDate)
+
 
         # print endLowPriceList
 
@@ -126,15 +120,6 @@ if __name__ == '__main__':
         except:
             print "email connect failed"
 
-        # 持仓状态
-        dictPriceDifference = futureCoinInformation(futureAPI,accountsAPI,dictRealizedFutureCoin,dictAvailableFutureCoin,dictPriceDifference,futureMaxDate)
 
-
-        needCoin = {}
-        for priceDifference in dictPriceDifference:
-            if dictPriceDifference[priceDifference] < 100:
-                needCoin[priceDifference] = dictPriceDifference[priceDifference]
-
-        print dictPriceDifference
         count = count + 1
         time.sleep(30)

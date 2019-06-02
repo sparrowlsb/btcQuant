@@ -14,7 +14,7 @@ import okex.swap_api as swap
 import json
 from datetime import datetime,timedelta
 from okex.consts import *
-from okex.premium import *
+from okex.premiumFuc import *
 if __name__ == '__main__':
     db = pymysql.connect(host=HOST, user=USER, passwd=PASSWORD, db=DBNAME)
 
@@ -62,49 +62,49 @@ if __name__ == '__main__':
 
     plt.figure(figsize=(16, 6))
     plt.subplot(4, 2, 1)
-    plt.plot(x, y1, label="EOS-Premium", color="red", linewidth=2)
+    plt.plot(x, y1, label="EOS-Premium", color="red", linewidth=1)
     plt.xlabel("Time(s)")
     plt.ylabel("Premium(%)")
     plt.title("Premium EOS Quant")
 
     plt.subplot(4, 2, 2)
-    plt.plot(x, y2, label="ETH-Premium", color="blue", linewidth=2)
+    plt.plot(x, y2, label="ETH-Premium", color="blue", linewidth=1)
     plt.xlabel("Time(s)")
     plt.ylabel("Premium(%)")
     plt.title("Premium ETH Quant")
 
     plt.subplot(4, 2, 3)
-    plt.plot(x, y3, label="LTC-Premium", color="#f45324", linewidth=2)
+    plt.plot(x, y3, label="LTC-Premium", color="#f45324", linewidth=1)
     plt.xlabel("Time(s)")
     plt.ylabel("Premium(%)")
     plt.title("Premium LTC Quant")
 
     plt.subplot(4, 2, 4)
-    plt.plot(x, y4, label="BCH-Premium", color="#340000", linewidth=2)
+    plt.plot(x, y4, label="BCH-Premium", color="#340000", linewidth=1)
     plt.xlabel("Time(s)")
     plt.ylabel("Premium(%)")
     plt.title("Premium BCH Quant")
 
     plt.subplot(4, 2, 5)
-    plt.plot(x, y5, label="XRP-Premium", color="#123312", linewidth=2)
+    plt.plot(x, y5, label="XRP-Premium", color="#123312", linewidth=1)
     plt.xlabel("Time(s)")
     plt.ylabel("Premium(%)")
     plt.title("Premium XRP Quant")
 
     plt.subplot(4, 2, 6)
-    plt.plot(x, y6, label="BTC-Premium", color="#243242", linewidth=2)
+    plt.plot(x, y6, label="BTC-Premium", color="#243242", linewidth=1)
     plt.xlabel("Time(s)")
     plt.ylabel("Premium(%)")
     plt.title("Premium BTC Quant")
 
     plt.subplot(4, 2, 7)
-    plt.plot(x, y7, label="BSV-Premium", color="#435234", linewidth=2)
+    plt.plot(x, y7, label="BSV-Premium", color="#435234", linewidth=1)
     plt.xlabel("Time(s)")
     plt.ylabel("Premium(%)")
     plt.title("Premium BSV Quant")
 
     plt.subplot(4, 2, 8)
-    plt.plot(x, y8, label="ETC-Premium", color="#867567", linewidth=2)
+    plt.plot(x, y8, label="ETC-Premium", color="#867567", linewidth=1)
     plt.xlabel("Time(s)")
     plt.ylabel("Premium(%)")
     plt.title("Premium ETC Quant")
